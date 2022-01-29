@@ -1,10 +1,12 @@
 package controller;
 
-import static com.spotify.sdk.android.auth.AccountsQueryParameters.CLIENT_ID;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +23,7 @@ import java.util.ArrayList;
 import model.Song;
 import model.SongAdapter;
 
-public class MainActivityController extends AppCompatActivity {
+public class MainActivityController extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     private static final int REQUEST_CODE = 1337;
     private static final String REDIRECT_URI = "http://localhost:8888/callback";
     private String token = "";
@@ -52,17 +54,49 @@ public class MainActivityController extends AppCompatActivity {
         rvNew.setAdapter(adapter);
     }
 
+    public void openUserMenu(View view){
+        Log.d("tag", "menu openned");
+        PopupMenu userMenu = new PopupMenu(this, view);
+        userMenu.setOnMenuItemClickListener(this);
+        MenuInflater inflater = userMenu.getMenuInflater();
+        inflater.inflate(R.menu.menu_user, userMenu.getMenu());
+        userMenu.show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        boolean returnValue;
+        Log.d("tag", String.valueOf(menuItem.getItemId()));
+        switch (menuItem.getItemId())
+        {
+            case R.id.login:
+                AuthorizationRequest.Builder builder =
+                        new AuthorizationRequest.Builder("55cf1e6ed39d4fa1becb626ec9086ef1", AuthorizationResponse.Type.TOKEN, REDIRECT_URI);
+
+                builder.setScopes(new String[]{"streaming"});
+                AuthorizationRequest request = builder.build();
+
+                AuthorizationClient.openLoginActivity(this, REQUEST_CODE, request);
+                returnValue =  true;
+                break;
+
+            case R.id.logout:
+                AuthorizationClient.clearCookies(this);
+                returnValue = true;
+                break;
+
+            default:
+                returnValue = false;
+                break;
+
+        }
+
+        return returnValue;
+    }
+
+
     public void generatePlaylist(View view){
         startActivity(new Intent(this, GeneratePlaylistController.class));
-
-
-        AuthorizationRequest.Builder builder =
-                new AuthorizationRequest.Builder("55cf1e6ed39d4fa1becb626ec9086ef1", AuthorizationResponse.Type.TOKEN, REDIRECT_URI);
-
-        builder.setScopes(new String[]{"streaming"});
-        AuthorizationRequest request = builder.build();
-
-        AuthorizationClient.openLoginActivity(this, REQUEST_CODE, request);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -91,4 +125,6 @@ public class MainActivityController extends AppCompatActivity {
             }
         }
     }
+
+
 }

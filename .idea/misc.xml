@@ -3,11 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/etien/OneDrive - USherbrooke/ConUHacksVI/ConUHacks_VI/app/src/main/res/drawable/round_button.xml" value="0.2705" />
         <entry key="..\:/Users/etien/OneDrive - USherbrooke/ConUHacksVI/ConUHacks_VI/app/src/main/res/drawable/starboy_cover.xml" value="0.3445" />
         <entry key="..\:/Users/etien/OneDrive - USherbrooke/ConUHacksVI/ConUHacks_VI/app/src/main/res/drawable/starboy_cover_background.xml" value="0.3445" />
         <entry key="..\:/Users/etien/OneDrive - USherbrooke/ConUHacksVI/ConUHacks_VI/app/src/main/res/layout/generate_playlist.xml" value="0.35260416666666666" />
         <entry key="..\:/Users/etien/OneDrive - USherbrooke/ConUHacksVI/ConUHacks_VI/app/src/main/res/layout/main_activity.xml" value="0.28940217391304346" />
         <entry key="..\:/Users/etien/OneDrive - USherbrooke/ConUHacksVI/ConUHacks_VI/app/src/main/res/layout/song_layout.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/etien/OneDrive - USherbrooke/ConUHacksVI/ConUHacks_VI/app/src/main/res/menu/menu_user.xml" value="0.265625" />
         <entry key="..\:/Users/etien/OneDrive - USherbrooke/ConUHacksVI/ConUHacks_VI/app/src/main/res/mipmap-anydpi-v26/starboy_cover.xml" value="0.3445" />
       </map>
     </option>

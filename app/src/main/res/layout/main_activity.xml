@@ -15,6 +15,35 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="15dp"
+                android:gravity="center|start"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/image_profile_pic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:onClick="openUserMenu"
+                    android:scaleType="fitCenter"
+                    tools:srcCompat="@drawable/starboy_cover"
+                    android:background="@drawable/starboy_cover"/>
+
+                <TextView
+                    android:id="@+id/text_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TextView"
+                    android:textAlignment="textStart"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
@@ -70,46 +99,82 @@
 
             <Button
                 android:id="@+id/button2"
+                style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="My Music" />
+                android:background="#000000"
+                android:text="My Music"
+                android:textAlignment="textStart"
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/button3"
+                style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="My Favorites" />
+                android:background="@color/black"
+                android:text="My Favorites"
+                android:textAlignment="textStart"
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/button4"
+                style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Staff Picks" />
+                android:background="@color/black"
+                android:text="Staff Picks"
+                android:textAlignment="textStart"
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/button5"
+                style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="New and Hot" />
+                android:background="@color/black"
+                android:text="New and Hot"
+                android:textAlignment="textStart"
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/button6"
+                style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Hot at ..." />
+                android:background="@color/black"
+                android:text="Hot at ..."
+                android:textAlignment="textStart"
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/button7"
+                style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Browse All Music" />
+                android:background="@color/black"
+                android:text="Browse All Music"
+                android:textAlignment="textStart"
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/button8"
+                style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/black"
                 android:onClick="generatePlaylist"
-                android:text="Generate Playlist" />
+                android:text="Generate Playlist"
+                android:textAlignment="textStart"
+                android:textSize="28sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

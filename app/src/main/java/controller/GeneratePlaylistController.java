@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.conuhacks_vi.R;
-import com.spotify.sdk.android.auth.AuthorizationClient;
 
 public class GeneratePlaylistController extends AppCompatActivity {
 
@@ -21,7 +20,6 @@ public class GeneratePlaylistController extends AppCompatActivity {
 
 
     public void logout(View view){
-        AuthorizationClient.clearCookies(this);
         startActivity(new Intent(this, MainActivityController.class));
     }
 }
