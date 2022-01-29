@@ -2,6 +2,7 @@ package controller;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -142,6 +143,8 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
 
 
     public void playlist(View view){
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         Log.d("", "TESTESTESTESTESTEST");
         SpotifyService spotify = APISpotify.api.getService();
 
@@ -164,6 +167,8 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
         }else{
             Log.d("", "SUCCESS");
         }
+
+        Log.d("", spotify.getMe().display_name);
     }
 
 }
