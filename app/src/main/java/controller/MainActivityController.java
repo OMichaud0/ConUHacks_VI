@@ -8,11 +8,18 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.conuhacks_vi.R;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
+
+import java.util.ArrayList;
+
+import model.Song;
+import model.SongAdapter;
 
 public class MainActivityController extends AppCompatActivity {
     private static final int REQUEST_CODE = 1337;
@@ -21,8 +28,27 @@ public class MainActivityController extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.main_activity);
+
+        ArrayList<Song> viewHot = new ArrayList<Song>();
+        ArrayList<Song> viewNew = new ArrayList<Song>();
+        for(int i = 0; i < 8; i++)
+        {
+            viewHot.add(new Song("Artist " + i, "Title "+ i));
+            viewNew.add(new Song("New Artist "+i, "New Song "+i));
+        }
+
+        RecyclerView rvHit = findViewById(R.id.rvHits);
+        LinearLayoutManager horizontalLayoutManager1 = new LinearLayoutManager(MainActivityController.this, LinearLayoutManager.HORIZONTAL, false);
+        rvHit.setLayoutManager(horizontalLayoutManager1);
+        SongAdapter adapter = new SongAdapter(this, viewHot);
+        rvHit.setAdapter(adapter);
+
+        RecyclerView rvNew = findViewById(R.id.rvNew);
+        LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(MainActivityController.this, LinearLayoutManager.HORIZONTAL, false);
+        rvNew.setLayoutManager(horizontalLayoutManager2);
+        adapter = new SongAdapter(this, viewNew);
+        rvNew.setAdapter(adapter);
     }
 
     public void generatePlaylist(View view){
