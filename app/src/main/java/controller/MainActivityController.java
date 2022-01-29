@@ -63,7 +63,7 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
     }
 
     public void openUserMenu(View view){
-        Log.d("tag", "menu openned");
+        Log.d("tag", "menu opened");
         PopupMenu userMenu = new PopupMenu(this, view);
         userMenu.setOnMenuItemClickListener(this);
         MenuInflater inflater = userMenu.getMenuInflater();
@@ -81,7 +81,13 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
                 AuthorizationRequest.Builder builder =
                         new AuthorizationRequest.Builder("55cf1e6ed39d4fa1becb626ec9086ef1", AuthorizationResponse.Type.TOKEN, REDIRECT_URI);
 
-                builder.setScopes(new String[]{"streaming"});
+                builder.setScopes(new String[]{"streaming", "user-read-private", "user-follow-modify",
+                        "user-follow-read", "user-library-modify", "user-library-read", "playlist-modify-private",
+                        "playlist-read-collaborative", "app-remote-control", "user-read-email",
+                        "playlist-read-private", "user-top-read", "playlist-modify-public",
+                        "user-read-currently-playing", "user-read-recently-played", "ugc-image-upload",
+                        "user-read-playback-state", "user-modify-playback-state", "user-read-playback-position"
+                });
                 AuthorizationRequest request = builder.build();
 
                 AuthorizationClient.openLoginActivity(this, REQUEST_CODE, request);
@@ -151,17 +157,6 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
             }
         });
 
-        spotify.getAlbum("2dIGnmEIy1WZIcZCFSj6i8", new Callback<Album>() {
-            @Override
-            public void success(Album album, Response response) {
-                Log.d("Album success", album.name);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.d("Album failure", error.toString());
-            }
-        });
 
         List<PlaylistSimple> test = spotify.getMyPlaylists().items;
         if(test.isEmpty()) {
@@ -169,7 +164,6 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
         }else{
             Log.d("", "SUCCESS");
         }
-
     }
 
 }
