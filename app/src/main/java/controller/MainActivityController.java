@@ -19,14 +19,22 @@ import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import kaaes.spotify.webapi.android.SpotifyService;
+import kaaes.spotify.webapi.android.models.Album;
+import kaaes.spotify.webapi.android.models.Pager;
+import kaaes.spotify.webapi.android.models.PlaylistSimple;
 import model.Song;
 import model.SongAdapter;
+import model.APISpotify;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class MainActivityController extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     private static final int REQUEST_CODE = 1337;
     private static final String REDIRECT_URI = "http://localhost:8888/callback";
-    private String token = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -111,7 +119,7 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
                 case TOKEN:
                     // Handle successful response
 
-                    token = response.getAccessToken();
+                    APISpotify.setToken(response.getAccessToken());
                     break;
 
                 // Auth flow returned an error
@@ -126,5 +134,42 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
         }
     }
 
+
+    public void playlist(View view){
+        Log.d("", "TESTESTESTESTESTEST");
+        SpotifyService spotify = APISpotify.api.getService();
+
+        spotify.getAlbum("2dIGnmEIy1WZIcZCFSj6i8", new Callback<Album>() {
+            @Override
+            public void success(Album album, Response response) {
+                Log.d("Album success", album.name);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d("Album failure", error.toString());
+            }
+        });
+
+        spotify.getAlbum("2dIGnmEIy1WZIcZCFSj6i8", new Callback<Album>() {
+            @Override
+            public void success(Album album, Response response) {
+                Log.d("Album success", album.name);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d("Album failure", error.toString());
+            }
+        });
+
+        List<PlaylistSimple> test = spotify.getMyPlaylists().items;
+        if(test.isEmpty()) {
+            Log.d("", "FAILURE");
+        }else{
+            Log.d("", "SUCCESS");
+        }
+
+    }
 
 }
