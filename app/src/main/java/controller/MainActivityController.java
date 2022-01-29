@@ -16,7 +16,8 @@ import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 public class MainActivityController extends AppCompatActivity {
     private static final int REQUEST_CODE = 1337;
-    private static final String REDIRECT_URI = "yourcustomprotocol://callback";
+    private static final String REDIRECT_URI = "http://localhost:8888/callback";
+    private String token = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,7 +31,7 @@ public class MainActivityController extends AppCompatActivity {
 
 
         AuthorizationRequest.Builder builder =
-                new AuthorizationRequest.Builder(CLIENT_ID, AuthorizationResponse.Type.TOKEN, REDIRECT_URI);
+                new AuthorizationRequest.Builder("55cf1e6ed39d4fa1becb626ec9086ef1", AuthorizationResponse.Type.TOKEN, REDIRECT_URI);
 
         builder.setScopes(new String[]{"streaming"});
         AuthorizationRequest request = builder.build();
@@ -49,6 +50,8 @@ public class MainActivityController extends AppCompatActivity {
                 // Response was successful and contains auth token
                 case TOKEN:
                     // Handle successful response
+
+                    token = response.getAccessToken();
                     break;
 
                 // Auth flow returned an error
