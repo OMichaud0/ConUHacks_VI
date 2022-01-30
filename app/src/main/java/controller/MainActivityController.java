@@ -1,8 +1,9 @@
 package controller;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -10,7 +11,9 @@ import android.view.View;
 import android.widget.PopupMenu;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,19 +23,10 @@ import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import kaaes.spotify.webapi.android.SpotifyService;
-import kaaes.spotify.webapi.android.models.Album;
-import kaaes.spotify.webapi.android.models.Followers;
-import kaaes.spotify.webapi.android.models.Pager;
-import kaaes.spotify.webapi.android.models.PlaylistSimple;
+import model.APISpotify;
 import model.Song;
 import model.SongAdapter;
-import model.APISpotify;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 /*
     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -48,11 +42,36 @@ import retrofit.client.Response;
 public class MainActivityController extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     private static final int REQUEST_CODE = 1337;
     private static final String REDIRECT_URI = "http://localhost:8888/callback";
+    SharedPreferences sharedPreferences;
+    boolean isConnected;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+
+        sharedPreferences = getSharedPreferences("ConuHacks", MODE_PRIVATE);
+        if(!sharedPreferences.getString("token", "").isEmpty()) {
+            APISpotify.setAccess(sharedPreferences.getString("token", ""));
+            isConnected = true;
+        }else
+            isConnected = false;
+
+
+        SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+                if(s.equals("token"))
+                {
+                    if(!sharedPreferences.getString("token", "").isEmpty())
+                        APISpotify.setAccess(sharedPreferences.getString("token", ""));
+                }
+            }
+        };
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener);
+
+
 
         ArrayList<Song> viewHot = new ArrayList<Song>();
         ArrayList<Song> viewNew = new ArrayList<Song>();
@@ -91,26 +110,17 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
         switch (menuItem.getItemId())
         {
             case R.id.login:
-                //The clientId needs to be fetch from the apps project on the Spotify developper tool
-                AuthorizationRequest.Builder builder =
-                        new AuthorizationRequest.Builder("55cf1e6ed39d4fa1becb626ec9086ef1", AuthorizationResponse.Type.TOKEN, REDIRECT_URI);
-
-                //All the scopes were added to make sure that all the desired actions can be performed
-                builder.setScopes(new String[]{"streaming", "user-read-private", "user-follow-modify",
-                        "user-follow-read", "user-library-modify", "user-library-read", "playlist-modify-private",
-                        "playlist-read-collaborative", "app-remote-control", "user-read-email",
-                        "playlist-read-private", "user-top-read", "playlist-modify-public",
-                        "user-read-currently-playing", "user-read-recently-played", "ugc-image-upload",
-                        "user-read-playback-state", "user-modify-playback-state", "user-read-playback-position"
-                });
-                AuthorizationRequest request = builder.build();
-
-                AuthorizationClient.openLoginActivity(this, REQUEST_CODE, request);
+                login();
                 returnValue =  true;
                 break;
 
             case R.id.logout:
                 AuthorizationClient.clearCookies(this);
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("token", "");
+                editor.apply();
+                isConnected = false;
                 returnValue = true;
                 break;
 
@@ -123,9 +133,35 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
         return returnValue;
     }
 
+    private void login(){
+        //The clientId needs to be fetch from the apps project on the Spotify developper tool
+        AuthorizationRequest.Builder builder =
+                new AuthorizationRequest.Builder("55cf1e6ed39d4fa1becb626ec9086ef1", AuthorizationResponse.Type.TOKEN, REDIRECT_URI);
+
+        //All the scopes were added to make sure that all the desired actions can be performed
+        builder.setScopes(new String[]{"streaming", "user-read-private", "user-follow-modify",
+                "user-follow-read", "user-library-modify", "user-library-read", "playlist-modify-private",
+                "playlist-read-collaborative", "app-remote-control", "user-read-email",
+                "playlist-read-private", "user-top-read", "playlist-modify-public",
+                "user-read-currently-playing", "user-read-recently-played", "ugc-image-upload",
+                "user-read-playback-state", "user-modify-playback-state", "user-read-playback-position"
+        });
+        AuthorizationRequest request = builder.build();
+
+        AuthorizationClient.openLoginActivity(this, REQUEST_CODE, request);
+    }
+
 
     public void generatePlaylist(View view){
-        startActivity(new Intent(this, GeneratePlaylistController.class));
+        if(!isConnected)
+        {
+            new AlertDialog.Builder(this).setTitle("Spotify account not connected").setMessage("Your Spotify account needs to be connected to get access to this feature")
+                    .setPositiveButton("Login", (dialog, which) -> login())
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                    .create().show();
+        }
+        else
+            startActivity(new Intent(this, GeneratePlaylistController.class));
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -141,7 +177,10 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
                     // Handle successful response
 
                     //Sets the token into the wrapper that will make the http calls
-                    APISpotify.setToken(response.getAccessToken());
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("token", response.getAccessToken());
+                    editor.apply();
+                    isConnected = true;
                     break;
 
                 // Auth flow returned an error
