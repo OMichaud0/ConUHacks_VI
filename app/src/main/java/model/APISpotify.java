@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.StrictMode;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,9 @@ public class APISpotify {
     public static SpotifyApi api = new SpotifyApi();
 
     public static void setAccess(String token){
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         api.setAccessToken(token);
         spotify = APISpotify.api.getService();
     }
@@ -37,7 +41,7 @@ public class APISpotify {
     }
 
     public static List<String> topPopularity(List<PlaylistTrack> playlist){
-        List<String> top = null;
+        List<String> top = new ArrayList<>();
         playlist = mergeSort(playlist);
         for(int i = playlist.size() - 1; i > playlist.size() - 6; i--){
             top.add(playlist.get(i).track.id);
