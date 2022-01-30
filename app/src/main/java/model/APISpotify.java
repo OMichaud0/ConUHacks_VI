@@ -72,6 +72,9 @@ public class APISpotify {
         spotify.addTracksToPlaylist(userId, listId, query, body);
     }
 
+    public static void generatePlaylist(List<PlaylistSimple> listOfPlaylists){
+    }
+
 
     public static List<PlaylistTrack> mergeSort(List<PlaylistTrack> listE){
         if(listE.size() == 1){
