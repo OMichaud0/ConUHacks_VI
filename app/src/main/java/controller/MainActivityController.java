@@ -194,6 +194,7 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("token", response.getAccessToken());
                     editor.apply();
+                    APISpotify.setAccess(response.getAccessToken());
                     isConnected = true;
                     text_username.setText(APISpotify.getName());
                     image_user.setImageDrawable(loadCoverFromWeb(APISpotify.getProfilePicture()));

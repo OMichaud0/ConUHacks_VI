@@ -1,6 +1,7 @@
 package controller;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -52,7 +53,15 @@ public class GeneratePlaylistController extends AppCompatActivity implements Vie
         {
             if(selectedPlaylist.size() < NUMBER_OF_PLAYLIST)
             {
-                selectedPlaylist.add((PlaylistSimple) playlist_list.getItemAtPosition(position));
+                list.add(selectedPlaylist.size(), list.remove(position));
+                updateDisplay();
+
+                for(int i = 0; i< selectedPlaylist.size(); i++) {
+                    playlist_list.getChildAt(i).setSelected(true);
+                }
+
+
+                selectedPlaylist.add((PlaylistSimple) playlist_list.getItemAtPosition(selectedPlaylist.size()));
             }
             else {
                 APISpotify.generatePlaylist(selectedPlaylist);
@@ -60,8 +69,7 @@ public class GeneratePlaylistController extends AppCompatActivity implements Vie
             }
         });
 
-
-    adapter.notifyDataSetChanged();
+    updateDisplay();
 }
 
     @Override
@@ -74,10 +82,20 @@ public class GeneratePlaylistController extends AppCompatActivity implements Vie
             if (!event.isShiftPressed()) {
                 Log.v("AndroidEnterKeyActivity", "Enter Key Pressed!");
                 list.clear();
+                list.addAll(selectedPlaylist);
                 list.addAll(APISpotify.searchPlaylist(searchbar.getText().toString().trim()));
                 adapter.notifyDataSetChanged();
             }
         }
         return false;
+    }
+
+    private void updateDisplay(){
+        List<PlaylistSimple> temp = new ArrayList<>(list);
+
+        list.clear();
+        list.addAll(temp);
+        adapter.notifyDataSetChanged();
+
     }
 }
