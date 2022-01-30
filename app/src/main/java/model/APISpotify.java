@@ -59,17 +59,19 @@ public class APISpotify {
     public static List<Track> getRecom(List<PlaylistTrack> playlist){
         List<String> top = topPopularity(playlist);
         Map<String, Object> mapping = new HashMap<>();
-        for(String s : top){
-            mapping.put("seed_tracks", s);
-        }
+        mapping.put("seed_tracks", top.get(0) + "," + top.get(1) + "," + top.get(2));
+        mapping.put("limit", 20);
+        mapping.put("market", "CA");
         return spotify.getRecommendations(mapping).tracks;
     }
 
-    public static String createPlaylist(String userId, String name){
-        Boolean isPublic = new Boolean(true);
+    public static Playlist createPlaylist(String userId, String name){
         Map<String, Object> mapping = new HashMap<>();
-        mapping.put(name, isPublic);
-        return spotify.createPlaylist(userId, mapping).id;
+        mapping.put("name", name);
+        mapping.put("public", "true");
+        mapping.put("collaborative", "false");
+        mapping.put("description", "");
+        return spotify.createPlaylist(userId, mapping);
     }
 
     public static void fillPlaylist(String userId, String listId, List<Track> playlist){
@@ -83,8 +85,23 @@ public class APISpotify {
         spotify.addTracksToPlaylist(userId, listId, query, body);
     }
 
-    public static void generatePlaylist(List<PlaylistSimple> listOfPlaylists){
+    public static Playlist generatePlaylist(List<PlaylistSimple> listOfPlaylists){
+        Playlist list = createPlaylist(spotify.getMe().id, "Beeeeesss In The Breeeeze");
 
+        List<Track> recom1 = getRecom(getTracks(listOfPlaylists.get(0).owner.id, listOfPlaylists.get(0).id));
+        List<Track> recom2 = getRecom(getTracks(listOfPlaylists.get(0).owner.id, listOfPlaylists.get(0).id));
+        List<Track> recom3 = getRecom(getTracks(listOfPlaylists.get(0).owner.id, listOfPlaylists.get(0).id));
+
+        Map<String, Object> query = new HashMap<>();
+        Map<String, Object> body = new HashMap<>();
+
+
+        for(int i = 0; i < recom1.size() && i < 20; i++){
+            query.put("uris", recom1.get(i).uri + "," + recom2.get(i).uri + "," + recom3.get(i).uri);;
+            spotify.addTracksToPlaylist(spotify.getMe().id, list.id, query, body);
+        }
+
+        return list;
     }
 
     public static String getName(){
@@ -112,7 +129,7 @@ public class APISpotify {
     public static List<PlaylistTrack> merge(List<PlaylistTrack> list1, List<PlaylistTrack> list2){
         int c1 = 0;
         int c2 = 0;
-        List<PlaylistTrack> mergedList = null;
+        List<PlaylistTrack> mergedList = new ArrayList<>();
         while(c1 < list1.size() || c2 < list2.size()){
             if(c1 == list1.size()){
                 mergedList.add(list2.get(c2));
