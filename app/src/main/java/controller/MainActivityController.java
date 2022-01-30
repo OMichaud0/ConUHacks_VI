@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -44,16 +45,20 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
     private static final String REDIRECT_URI = "http://localhost:8888/callback";
     SharedPreferences sharedPreferences;
     boolean isConnected;
+    TextView text_username;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
+
+
         sharedPreferences = getSharedPreferences("ConuHacks", MODE_PRIVATE);
         if(!sharedPreferences.getString("token", "").isEmpty()) {
             APISpotify.setAccess(sharedPreferences.getString("token", ""));
             isConnected = true;
+
         }else
             isConnected = false;
 

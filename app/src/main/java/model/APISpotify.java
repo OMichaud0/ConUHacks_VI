@@ -1,5 +1,6 @@
 package model;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.StrictMode;
@@ -13,21 +14,27 @@ import java.util.List;
 import java.util.Map;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
+import kaaes.spotify.webapi.android.SpotifyCallback;
+import kaaes.spotify.webapi.android.SpotifyError;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Playlist;
 import kaaes.spotify.webapi.android.models.PlaylistSimple;
 import kaaes.spotify.webapi.android.models.PlaylistTrack;
+import kaaes.spotify.webapi.android.models.PlaylistsPager;
 import kaaes.spotify.webapi.android.models.Track;
+import retrofit.client.Response;
 
 public class APISpotify {
 
     public static SpotifyService spotify;
     public static SpotifyApi api = new SpotifyApi();
+    public static String mtoken;
 
     public static void setAccess(String token){
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        mtoken = token;
         api.setAccessToken(token);
         spotify = APISpotify.api.getService();
     }
