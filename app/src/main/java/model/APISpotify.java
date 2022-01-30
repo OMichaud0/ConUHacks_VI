@@ -50,7 +50,7 @@ public class APISpotify {
     public static List<String> topPopularity(List<PlaylistTrack> playlist){
         List<String> top = new ArrayList<>();
         playlist = mergeSort(playlist);
-        for(int i = playlist.size() - 1; i > playlist.size() - 6; i--){
+        for(int i = playlist.size() - 1; i > playlist.size() - 6 && i >= 0; i--){
             top.add(playlist.get(i).track.id);
         }
         return top;
@@ -59,7 +59,14 @@ public class APISpotify {
     public static List<Track> getRecom(List<PlaylistTrack> playlist){
         List<String> top = topPopularity(playlist);
         Map<String, Object> mapping = new HashMap<>();
-        mapping.put("seed_tracks", top.get(0) + "," + top.get(1) + "," + top.get(2));
+        if(playlist.size() >= 3){
+            mapping.put("seed_tracks", top.get(0) + "," + top.get(1) + "," + top.get(2));
+        }else if(playlist.size() >= 2){
+            mapping.put("seed_tracks", top.get(0) + "," + top.get(1));
+        }else{
+            mapping.put("seed_tracks", top.get(0));
+        }
+
         mapping.put("limit", 20);
         mapping.put("market", "CA");
         return spotify.getRecommendations(mapping).tracks;
