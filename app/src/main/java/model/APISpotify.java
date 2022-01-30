@@ -23,6 +23,8 @@ import kaaes.spotify.webapi.android.models.PlaylistTrack;
 import kaaes.spotify.webapi.android.models.PlaylistsPager;
 import kaaes.spotify.webapi.android.models.Track;
 import retrofit.client.Response;
+import retrofit.http.GET;
+import retrofit.http.Path;
 
 public class APISpotify {
 
@@ -101,6 +103,8 @@ public class APISpotify {
             spotify.addTracksToPlaylist(spotify.getMe().id, list.id, query, body);
         }
 
+        list = spotify.getPlaylist(list.owner.id, list.id);
+
         return list;
     }
 
@@ -130,6 +134,8 @@ public class APISpotify {
     public static List<PlaylistSimple> getAllPlaylist(){
         return spotify.getPlaylists(spotify.getMe().id).items;
     }
+
+    @GET("/playlists/{playlist_id}/images")
 
 
     public static List<PlaylistTrack> mergeSort(List<PlaylistTrack> listE){
@@ -168,6 +174,11 @@ public class APISpotify {
             }
         }
         return mergedList;
+    }
+
+    public interface image{
+        @GET("/playlists/{playlist_id}/images")
+        String getImage(@Path("playlist_id") String listId);
     }
 
 
