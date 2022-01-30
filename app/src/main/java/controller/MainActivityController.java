@@ -195,4 +195,8 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
         }
     }
 
+    public static void playlist(View view){
+
+    }
+
 }
