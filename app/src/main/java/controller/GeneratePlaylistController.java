@@ -42,6 +42,8 @@ public class GeneratePlaylistController extends AppCompatActivity implements Vie
         searchbar.setOnKeyListener(this);
 
         list = new ArrayList<PlaylistSimple>();
+
+        list = APISpotify.searchPlaylist("music");
         playlist_list = findViewById(R.id.playlist_list);
         adapter = new PlaylistAdapter(this, R.layout.playlist_layout, list);
         playlist_list.setAdapter(adapter);

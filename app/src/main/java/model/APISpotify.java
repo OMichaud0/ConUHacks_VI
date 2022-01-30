@@ -77,6 +77,15 @@ public class APISpotify {
     }
 
     public static void generatePlaylist(List<PlaylistSimple> listOfPlaylists){
+
+    }
+
+    public static String getName(){
+        return spotify.getMe().display_name;
+    }
+
+    public static String getProfilePicture(){
+        return spotify.getMe().images.get(0).url;
     }
 
 
