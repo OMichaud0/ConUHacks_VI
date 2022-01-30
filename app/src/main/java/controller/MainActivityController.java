@@ -3,11 +3,13 @@ package controller;
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -23,6 +25,8 @@ import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 
 import model.APISpotify;
@@ -46,18 +50,23 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
     SharedPreferences sharedPreferences;
     boolean isConnected;
     TextView text_username;
+    ImageButton image_user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-
+        text_username = findViewById(R.id.text_username);
+        image_user = findViewById(R.id.image_profile_pic);
 
         sharedPreferences = getSharedPreferences("ConuHacks", MODE_PRIVATE);
         if(!sharedPreferences.getString("token", "").isEmpty()) {
             APISpotify.setAccess(sharedPreferences.getString("token", ""));
             isConnected = true;
+
+            text_username.setText(APISpotify.getName());
+            image_user.setImageDrawable(loadCoverFromWeb(APISpotify.getProfilePicture()));
 
         }else
             isConnected = false;
@@ -186,6 +195,8 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
                     editor.putString("token", response.getAccessToken());
                     editor.apply();
                     isConnected = true;
+                    text_username.setText(APISpotify.getName());
+                    image_user.setImageDrawable(loadCoverFromWeb(APISpotify.getProfilePicture()));
                     break;
 
                 // Auth flow returned an error
@@ -202,6 +213,16 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
 
     public static void playlist(View view){
 
+    }
+
+    private Drawable loadCoverFromWeb(String url) {
+        try{
+            InputStream is = (InputStream) new URL(url).getContent();
+            Drawable d = Drawable.createFromStream(is, "");
+            return d;
+        } catch (Exception e){
+            return null;
+        }
     }
 
 }
