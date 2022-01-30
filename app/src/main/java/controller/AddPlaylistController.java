@@ -70,6 +70,7 @@ public class AddPlaylistController extends AppCompatActivity implements View.OnK
                 selectedPlaylist.clear();
 
                 Intent i = new Intent(this, ShowPlaylistController.class);
+                i.putExtra("Controller", 1);
                 startActivity(i);
             }
         });

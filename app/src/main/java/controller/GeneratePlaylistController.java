@@ -73,6 +73,7 @@ public class GeneratePlaylistController extends AppCompatActivity implements Vie
                 selectedPlaylist.clear();
 
                 Intent i = new Intent(this, ShowPlaylistController.class);
+                i.putExtra("Controller", 0);
                 startActivity(i);
             }
         });

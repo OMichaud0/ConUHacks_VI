@@ -34,7 +34,12 @@ public class ShowPlaylistController extends AppCompatActivity {
         ImageView cover_playlist = findViewById(R.id.cover_playlist);
         TextView title_playlist = findViewById(R.id.title_playlist);
 
-        playlist = GeneratePlaylistController.playlist;
+        if((int) getIntent().getExtras().get("Controller") == 1)
+            playlist = AddPlaylistController.playlist;
+        else
+            playlist = GeneratePlaylistController.playlist;
+
+
 
         title_playlist.setText(playlist.name);
         Drawable d = loadCoverFromWeb(playlist.images.get(0).url);

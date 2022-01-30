@@ -17,7 +17,7 @@ public class AllPlaylistController extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.all_playlist);
 
-        ListView playlist_all = findViewById(R.id.playlist_list);
+        ListView playlist_all = findViewById(R.id.playlist_all);
         PlaylistAdapter adapter = new PlaylistAdapter(this, R.layout.playlist_layout, APISpotify.getAllPlaylist());
         playlist_all.setAdapter(adapter);
 
