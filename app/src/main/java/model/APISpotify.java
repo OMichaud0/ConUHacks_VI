@@ -92,7 +92,10 @@ public class APISpotify {
     }
 
     public static String getProfilePicture(){
-        return spotify.getMe().images.get(0).url;
+        if(spotify.getMe().images.size() > 0)
+            return spotify.getMe().images.get(0).url;
+        else
+            return "https://us.123rf.com/450wm/urfandadashov/urfandadashov1805/urfandadashov180500070/100957966-photo-not-available-icon-isolated-on-white-background-vector-illustration.jpg?ver=6";
     }
 
 
