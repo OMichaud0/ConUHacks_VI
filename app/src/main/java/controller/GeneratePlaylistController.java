@@ -3,6 +3,8 @@ package controller;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -18,6 +20,7 @@ import com.example.conuhacks_vi.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import kaaes.spotify.webapi.android.models.Playlist;
 import kaaes.spotify.webapi.android.models.PlaylistSimple;
 import model.APISpotify;
 import model.PlaylistAdapter;
@@ -31,6 +34,7 @@ public class GeneratePlaylistController extends AppCompatActivity implements Vie
     PlaylistAdapter adapter;
     ListView playlist_list;
     List<PlaylistSimple> selectedPlaylist;
+    Playlist playlist;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,9 +67,14 @@ public class GeneratePlaylistController extends AppCompatActivity implements Vie
 
                 selectedPlaylist.add((PlaylistSimple) playlist_list.getItemAtPosition(selectedPlaylist.size()));
             }
-            else {
-                APISpotify.generatePlaylist(selectedPlaylist);
+            if(selectedPlaylist.size()>= NUMBER_OF_PLAYLIST)
+            {
+                playlist = APISpotify.generatePlaylist(selectedPlaylist);
                 selectedPlaylist.clear();
+
+                Intent i = new Intent(this, ShowPlaylistController.class);
+                i.putExtra("playlist", playlist);
+                startActivity(i);
             }
         });
 
