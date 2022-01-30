@@ -175,6 +175,18 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
             startActivity(new Intent(this, GeneratePlaylistController.class));
     }
 
+    public void mergePlaylists(View view){
+        if(!isConnected)
+        {
+            new AlertDialog.Builder(this).setTitle("Spotify account not connected").setMessage("Your Spotify account needs to be connected to get access to this feature")
+                    .setPositiveButton("Login", (dialog, which) -> login())
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                    .create().show();
+        }
+        else
+            startActivity(new Intent(this, AddPlaylistController.class));
+    }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
