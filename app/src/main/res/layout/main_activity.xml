@@ -28,10 +28,10 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
+                    android:background="@drawable/no_image"
                     android:onClick="openUserMenu"
                     android:scaleType="fitCenter"
-                    tools:srcCompat="@drawable/starboy_cover"
-                    android:background="@drawable/starboy_cover"/>
+                    tools:srcCompat="@drawable/no_image" />
 
                 <TextView
                     android:id="@+id/text_username"

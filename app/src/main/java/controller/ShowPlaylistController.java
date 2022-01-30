@@ -17,7 +17,6 @@ import java.io.InputStream;
 import java.net.URL;
 
 import kaaes.spotify.webapi.android.models.Playlist;
-import model.PlaylistAdapter;
 import model.SongAdapter2;
 
 public class ShowPlaylistController extends AppCompatActivity {
@@ -35,15 +34,14 @@ public class ShowPlaylistController extends AppCompatActivity {
         ImageView cover_playlist = findViewById(R.id.cover_playlist);
         TextView title_playlist = findViewById(R.id.title_playlist);
 
-        Intent intent = getIntent();
         playlist = GeneratePlaylistController.playlist;
 
         title_playlist.setText(playlist.name);
-        //Drawable d = loadCoverFromWeb(playlist.images.get(0).url);
-        //if(d != null)
-        //    cover_playlist.setImageDrawable(d);
-       // else
-        //    cover_playlist.setImageResource(R.drawable.no_image);
+        Drawable d = loadCoverFromWeb(playlist.images.get(0).url);
+        if(d != null)
+            cover_playlist.setImageDrawable(d);
+        else
+            cover_playlist.setImageResource(R.drawable.no_image);
 
 
         listView = findViewById(R.id.playlist);
@@ -57,8 +55,11 @@ public class ShowPlaylistController extends AppCompatActivity {
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
 
-        share.putExtra(Intent.EXTRA_SUBJECT, playlist.name);
-        share.putExtra(Intent.EXTRA_TEXT, playlist.external_urls.get("spotify"));
+        String name = playlist.name;
+        String url = playlist.external_urls.get("spotify");
+
+        share.putExtra(Intent.EXTRA_SUBJECT, name);
+        share.putExtra(Intent.EXTRA_TEXT, url);
 
         startActivity(Intent.createChooser(share, "Share your playlist !"));
     }

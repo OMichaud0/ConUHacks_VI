@@ -1,6 +1,6 @@
 package controller;
 
-import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -16,7 +16,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,6 +50,7 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
     boolean isConnected;
     TextView text_username;
     ImageButton image_user;
+    Context context;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +60,8 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
         text_username = findViewById(R.id.text_username);
         image_user = findViewById(R.id.image_profile_pic);
 
+        context = this;
+
         sharedPreferences = getSharedPreferences("ConuHacks", MODE_PRIVATE);
         if(!sharedPreferences.getString("token", "").isEmpty()) {
             APISpotify.setAccess(sharedPreferences.getString("token", ""));
@@ -67,6 +69,18 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
 
             text_username.setText(APISpotify.getName());
             image_user.setImageDrawable(loadCoverFromWeb(APISpotify.getProfilePicture()));
+
+            RecyclerView rvHit = findViewById(R.id.rvHits);
+            LinearLayoutManager horizontalLayoutManager1 = new LinearLayoutManager(MainActivityController.this, LinearLayoutManager.HORIZONTAL, false);
+            rvHit.setLayoutManager(horizontalLayoutManager1);
+            SongAdapter adapter = new SongAdapter(context, APISpotify.getTop50());
+            rvHit.setAdapter(adapter);
+
+            RecyclerView rvNew = findViewById(R.id.rvNew);
+            LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(MainActivityController.this, LinearLayoutManager.HORIZONTAL, false);
+            rvNew.setLayoutManager(horizontalLayoutManager2);
+            adapter = new SongAdapter(context, APISpotify.getNewRelease());
+            rvNew.setAdapter(adapter);
 
         }else
             isConnected = false;
@@ -77,8 +91,9 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
                 if(s.equals("token"))
                 {
-                    if(!sharedPreferences.getString("token", "").isEmpty())
+                    if(!sharedPreferences.getString("token", "").isEmpty()) {
                         APISpotify.setAccess(sharedPreferences.getString("token", ""));
+                    }
                 }
             }
         };
@@ -86,26 +101,6 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
         sharedPreferences.registerOnSharedPreferenceChangeListener(listener);
 
 
-
-        ArrayList<Song> viewHot = new ArrayList<Song>();
-        ArrayList<Song> viewNew = new ArrayList<Song>();
-        for(int i = 0; i < 8; i++)
-        {
-            viewHot.add(new Song("Artist " + i, "Title "+ i));
-            viewNew.add(new Song("New Artist "+i, "New Song "+i));
-        }
-
-        RecyclerView rvHit = findViewById(R.id.rvHits);
-        LinearLayoutManager horizontalLayoutManager1 = new LinearLayoutManager(MainActivityController.this, LinearLayoutManager.HORIZONTAL, false);
-        rvHit.setLayoutManager(horizontalLayoutManager1);
-        SongAdapter adapter = new SongAdapter(this, APISpotify.getTop50());
-        rvHit.setAdapter(adapter);
-
-        RecyclerView rvNew = findViewById(R.id.rvNew);
-        LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(MainActivityController.this, LinearLayoutManager.HORIZONTAL, false);
-        rvNew.setLayoutManager(horizontalLayoutManager2);
-        adapter = new SongAdapter(this, APISpotify.getNewRelease());
-        rvNew.setAdapter(adapter);
     }
 
     public void openUserMenu(View view){
@@ -135,6 +130,8 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
                 editor.putString("token", "");
                 editor.apply();
                 isConnected = false;
+                text_username.setText("");
+                image_user.setImageResource(R.drawable.no_image);
                 returnValue = true;
                 break;
 
@@ -198,6 +195,17 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
                     isConnected = true;
                     text_username.setText(APISpotify.getName());
                     image_user.setImageDrawable(loadCoverFromWeb(APISpotify.getProfilePicture()));
+                    RecyclerView rvHit = findViewById(R.id.rvHits);
+                    LinearLayoutManager horizontalLayoutManager1 = new LinearLayoutManager(MainActivityController.this, LinearLayoutManager.HORIZONTAL, false);
+                    rvHit.setLayoutManager(horizontalLayoutManager1);
+                    SongAdapter adapter = new SongAdapter(context, APISpotify.getTop50());
+                    rvHit.setAdapter(adapter);
+
+                    RecyclerView rvNew = findViewById(R.id.rvNew);
+                    LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(MainActivityController.this, LinearLayoutManager.HORIZONTAL, false);
+                    rvNew.setLayoutManager(horizontalLayoutManager2);
+                    adapter = new SongAdapter(context, APISpotify.getNewRelease());
+                    rvNew.setAdapter(adapter);
                     break;
 
                 // Auth flow returned an error
