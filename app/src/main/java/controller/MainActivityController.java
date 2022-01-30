@@ -98,13 +98,13 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
         RecyclerView rvHit = findViewById(R.id.rvHits);
         LinearLayoutManager horizontalLayoutManager1 = new LinearLayoutManager(MainActivityController.this, LinearLayoutManager.HORIZONTAL, false);
         rvHit.setLayoutManager(horizontalLayoutManager1);
-        SongAdapter adapter = new SongAdapter(this, viewHot);
+        SongAdapter adapter = new SongAdapter(this, APISpotify.getTop50());
         rvHit.setAdapter(adapter);
 
         RecyclerView rvNew = findViewById(R.id.rvNew);
         LinearLayoutManager horizontalLayoutManager2 = new LinearLayoutManager(MainActivityController.this, LinearLayoutManager.HORIZONTAL, false);
         rvNew.setLayoutManager(horizontalLayoutManager2);
-        adapter = new SongAdapter(this, viewNew);
+        adapter = new SongAdapter(this, APISpotify.getNewRelease());
         rvNew.setAdapter(adapter);
     }
 

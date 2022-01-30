@@ -1,6 +1,7 @@
 package model;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +15,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.conuhacks_vi.R;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import kaaes.spotify.webapi.android.models.PlaylistTrack;
+
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
-    private List<Song> mViewSongs;
+    private List<PlaylistTrack> mViewSongs;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    public SongAdapter(Context context, List<Song> songs) {
+    public SongAdapter(Context context, List<PlaylistTrack> songs) {
         this.mInflater = LayoutInflater.from(context);
         this.mViewSongs = songs;
     }
@@ -41,10 +46,16 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
     // binds the data to the view and textview in each row
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Song song = mViewSongs.get(position);
-        holder.vCover.setImageResource(R.drawable.starboy_cover);
-        holder.vArtist.setText(song.artist);
-        holder.vTitle.setText(song.title);
+        PlaylistTrack song = mViewSongs.get(position);
+
+        Drawable d = loadCoverFromWeb(song.track.album.images.get(0).url);
+        if(d != null)
+            holder.vCover.setImageDrawable(d);
+        else
+            holder.vCover.setImageResource(R.drawable.no_image);
+
+        holder.vArtist.setText(song.track.artists.get(0).name);
+        holder.vTitle.setText(song.track.name);
     }
 
     // total number of rows
@@ -74,7 +85,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
     }
 
     // convenience method for getting data at click position
-    public Song getItem(int id) {
+    public PlaylistTrack getItem(int id) {
         return mViewSongs.get(id);
     }
 
@@ -86,6 +97,16 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder>{
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+    }
+
+    private Drawable loadCoverFromWeb(String url) {
+        try{
+            InputStream is = (InputStream) new URL(url).getContent();
+            Drawable d = Drawable.createFromStream(is, "");
+            return d;
+        } catch (Exception e){
+            return null;
+        }
     }
 
 }

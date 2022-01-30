@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -16,10 +17,14 @@ import java.io.InputStream;
 import java.net.URL;
 
 import kaaes.spotify.webapi.android.models.Playlist;
+import model.PlaylistAdapter;
+import model.SongAdapter2;
 
 public class ShowPlaylistController extends AppCompatActivity {
 
     Playlist playlist;
+    ListView listView;
+    SongAdapter2 adapter;
 
 
     @Override
@@ -31,14 +36,21 @@ public class ShowPlaylistController extends AppCompatActivity {
         TextView title_playlist = findViewById(R.id.title_playlist);
 
         Intent intent = getIntent();
-        playlist = intent.getParcelableExtra("playlist");
+        playlist = GeneratePlaylistController.playlist;
 
         title_playlist.setText(playlist.name);
-        Drawable d = loadCoverFromWeb(playlist.images.get(0).url);
-        if(d != null)
-            cover_playlist.setImageDrawable(d);
-        else
-            cover_playlist.setImageResource(R.drawable.no_image);
+        //Drawable d = loadCoverFromWeb(playlist.images.get(0).url);
+        //if(d != null)
+        //    cover_playlist.setImageDrawable(d);
+       // else
+        //    cover_playlist.setImageResource(R.drawable.no_image);
+
+
+        listView = findViewById(R.id.playlist);
+        adapter = new SongAdapter2(this, R.layout.song_layout2, playlist.tracks.items);
+        listView.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
     }
 
     public void share(View view){

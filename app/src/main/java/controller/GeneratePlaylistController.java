@@ -34,7 +34,7 @@ public class GeneratePlaylistController extends AppCompatActivity implements Vie
     PlaylistAdapter adapter;
     ListView playlist_list;
     List<PlaylistSimple> selectedPlaylist;
-    Playlist playlist;
+    static Playlist playlist;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

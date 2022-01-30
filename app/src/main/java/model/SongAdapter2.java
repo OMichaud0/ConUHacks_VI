@@ -50,7 +50,13 @@ public class SongAdapter2 extends ArrayAdapter<PlaylistTrack> {
         song_title.setText(getItem(position).track.name);
         song_artist.setText(getItem(position).track.artists.get(0).name);
         int ms = (int) getItem(position).track.duration_ms;
-        song_duration.setText((ms/1000)/60 + ":" + (ms/1000)%60);
+        int min = (ms/1000)/60;
+        int s = (ms/1000)%60;
+
+        if(s < 10)
+            song_duration.setText(min + ":0" + s);
+        else
+            song_duration.setText(min + ":" + s);
 
         Drawable d = loadCoverFromWeb(getItem(position).track.album.images.get(0).url);
         if(d != null)
