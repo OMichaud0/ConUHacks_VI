@@ -18,7 +18,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
-import kaaes.spotify.webapi.android.models.PlaylistSimple;
 import kaaes.spotify.webapi.android.models.PlaylistTrack;
 
 public class SongAdapter2 extends ArrayAdapter<PlaylistTrack> {
