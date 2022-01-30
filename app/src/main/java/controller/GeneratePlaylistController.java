@@ -42,6 +42,7 @@ public class GeneratePlaylistController extends AppCompatActivity implements Vie
         searchbar.setOnKeyListener(this);
 
         list = new ArrayList<PlaylistSimple>();
+
         playlist_list = findViewById(R.id.playlist_list);
         adapter = new PlaylistAdapter(this, R.layout.playlist_layout, list);
         playlist_list.setAdapter(adapter);
@@ -72,7 +73,8 @@ public class GeneratePlaylistController extends AppCompatActivity implements Vie
 
             if (!event.isShiftPressed()) {
                 Log.v("AndroidEnterKeyActivity", "Enter Key Pressed!");
-                list = APISpotify.searchPlaylist(searchbar.getText().toString().trim());
+                list.clear();
+                list.addAll(APISpotify.searchPlaylist(searchbar.getText().toString().trim()));
                 adapter.notifyDataSetChanged();
             }
         }
