@@ -115,6 +115,22 @@ public class APISpotify {
             return "https://us.123rf.com/450wm/urfandadashov/urfandadashov1805/urfandadashov180500070/100957966-photo-not-available-icon-isolated-on-white-background-vector-illustration.jpg?ver=6";
     }
 
+    public static List<PlaylistTrack> getTop50(){
+        return spotify.getPlaylistTracks("spotify", "37i9dQZEVXbMDoHDwVN2tF").items.subList(0,15);
+    }
+
+    public static List<PlaylistTrack> getNewRelease(){
+        return spotify.getPlaylistTracks("spotify", "37i9dQZF1DX5DfG8gQdC3F").items.subList(0,15);
+    }
+
+    public static List<Track> getUserFavorites(){
+        return spotify.getTopTracks().items;
+    }
+
+    public static List<PlaylistSimple> getAllPlaylist(){
+        return spotify.getPlaylists(spotify.getMe().id).items;
+    }
+
 
     public static List<PlaylistTrack> mergeSort(List<PlaylistTrack> listE){
         if(listE.size() == 1){
