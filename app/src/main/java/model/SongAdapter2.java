@@ -44,7 +44,7 @@ public class SongAdapter2 extends ArrayAdapter<PlaylistTrack> {
         ImageView song_cover = convertView.findViewById(R.id.song_cover);
         TextView song_title = convertView.findViewById(R.id.song_title);
         TextView song_artist = convertView.findViewById(R.id.song_artist);
-        TextView song_duration = convertView.findViewById(R.id.song_duration)
+        TextView song_duration = convertView.findViewById(R.id.song_duration);
 
 
         song_title.setText(getItem(position).track.name);

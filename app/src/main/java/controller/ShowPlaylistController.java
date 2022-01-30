@@ -52,11 +52,12 @@ public class ShowPlaylistController extends AppCompatActivity {
     }
 
     private Drawable loadCoverFromWeb(String url) {
-        try{
+        try {
             InputStream is = (InputStream) new URL(url).getContent();
             Drawable d = Drawable.createFromStream(is, "");
             return d;
-        } catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
+    }
 }

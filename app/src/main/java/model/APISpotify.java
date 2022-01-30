@@ -31,6 +31,7 @@ public class APISpotify {
     public static SpotifyService spotify;
     public static SpotifyApi api = new SpotifyApi();
     public static String mtoken;
+    public static Image image;
 
     public static void setAccess(String token){
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -135,7 +136,9 @@ public class APISpotify {
         return spotify.getPlaylists(spotify.getMe().id).items;
     }
 
-    @GET("/playlists/{playlist_id}/images")
+    public static String getImage(String listId){
+        return image.getImage(listId);
+    }
 
 
     public static List<PlaylistTrack> mergeSort(List<PlaylistTrack> listE){
@@ -176,7 +179,7 @@ public class APISpotify {
         return mergedList;
     }
 
-    public interface image{
+    public interface Image{
         @GET("/playlists/{playlist_id}/images")
         String getImage(@Path("playlist_id") String listId);
     }
