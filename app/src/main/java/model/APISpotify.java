@@ -140,6 +140,29 @@ public class APISpotify {
         return spotify.getPlaylists(spotify.getMe().id).items;
     }
 
+    public static Playlist concatenate(List<PlaylistSimple> listOfPlaylists){
+        Playlist list = createPlaylist(spotify.getMe().id, "Concatenated");
+        List<Track> list1 = getRecom(getTracks(listOfPlaylists.get(0).owner.id, listOfPlaylists.get(0).id));
+        List<Track> list2 = getRecom(getTracks(listOfPlaylists.get(0).owner.id, listOfPlaylists.get(0).id));
+
+        Map<String, Object> query = new HashMap<>();
+        Map<String, Object> body = new HashMap<>();
+
+
+        for(Track t : list1){
+            query.put("uris", t.uri);
+            spotify.addTracksToPlaylist(spotify.getMe().id, list.id, query, body);
+        }
+        for(Track t : list2){
+            query.put("uris", t.uri);
+            spotify.addTracksToPlaylist(spotify.getMe().id, list.id, query, body);
+        }
+
+        list = spotify.getPlaylist(list.owner.id, list.id);
+
+        return list;
+    }
+
 
 
     public static List<PlaylistTrack> mergeSort(List<PlaylistTrack> listE){
