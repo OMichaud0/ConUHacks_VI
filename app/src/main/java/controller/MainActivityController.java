@@ -33,6 +33,17 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+/*
+    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+    StrictMode.setThreadPolicy(policy);
+    SpotifyService spotify = APISpotify.api.getService();
+
+    Strictmode allows us to bypass the threading paradigm of the app that would cause it ot crash
+    when performing http calls to through the api. This is only a temporary fix, for a long term
+    project this would be implemented using multithreading to maintain performance and prevent
+    the app from crashing.
+ */
+
 public class MainActivityController extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     private static final int REQUEST_CODE = 1337;
     private static final String REDIRECT_URI = "http://localhost:8888/callback";
@@ -79,9 +90,11 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
         switch (menuItem.getItemId())
         {
             case R.id.login:
+                //The clientId needs to be fetch from the apps project on the Spotify developper tool
                 AuthorizationRequest.Builder builder =
                         new AuthorizationRequest.Builder("55cf1e6ed39d4fa1becb626ec9086ef1", AuthorizationResponse.Type.TOKEN, REDIRECT_URI);
 
+                //All the scopes were added to make sure that all the desired actions can be performed
                 builder.setScopes(new String[]{"streaming", "user-read-private", "user-follow-modify",
                         "user-follow-read", "user-library-modify", "user-library-read", "playlist-modify-private",
                         "playlist-read-collaborative", "app-remote-control", "user-read-email",
@@ -126,6 +139,7 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
                 case TOKEN:
                     // Handle successful response
 
+                    //Sets the token into the wrapper that will make the http calls
                     APISpotify.setToken(response.getAccessToken());
                     break;
 
@@ -139,36 +153,6 @@ public class MainActivityController extends AppCompatActivity implements PopupMe
                     // Handle other cases
             }
         }
-    }
-
-
-    public void playlist(View view){
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        Log.d("", "TESTESTESTESTESTEST");
-        SpotifyService spotify = APISpotify.api.getService();
-
-        spotify.getAlbum("2dIGnmEIy1WZIcZCFSj6i8", new Callback<Album>() {
-            @Override
-            public void success(Album album, Response response) {
-                Log.d("Album success", album.name);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.d("Album failure", error.toString());
-            }
-        });
-
-
-        List<PlaylistSimple> test = spotify.getMyPlaylists().items;
-        if(test.isEmpty()) {
-            Log.d("", "FAILURE");
-        }else{
-            Log.d("", "SUCCESS");
-        }
-
-        Log.d("", spotify.getMe().display_name);
     }
 
 }
