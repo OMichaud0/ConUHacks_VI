@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/etien/.gradle/caches/transforms-3/1ebd40080fa9f4b35749da151cc9865a/transformed/auth-1.2.6/res/layout/com_spotify_sdk_login_activity.xml" value="0.22760416666666666" />
+        <entry key="..\:/Users/etien/.gradle/caches/transforms-3/1ebd40080fa9f4b35749da151cc9865a/transformed/auth-1.2.6/res/layout/com_spotify_sdk_login_dialog.xml" value="0.22760416666666666" />
         <entry key="..\:/Users/etien/OneDrive - USherbrooke/ConUHacksVI/ConUHacks_VI/app/src/main/res/drawable/round_button.xml" value="0.2705" />
         <entry key="..\:/Users/etien/OneDrive - USherbrooke/ConUHacksVI/ConUHacks_VI/app/src/main/res/drawable/starboy_cover.xml" value="0.3445" />
         <entry key="..\:/Users/etien/OneDrive - USherbrooke/ConUHacksVI/ConUHacks_VI/app/src/main/res/drawable/starboy_cover_background.xml" value="0.3445" />
