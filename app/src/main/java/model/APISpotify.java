@@ -22,7 +22,6 @@ import kaaes.spotify.webapi.android.models.PlaylistSimple;
 import kaaes.spotify.webapi.android.models.PlaylistTrack;
 import kaaes.spotify.webapi.android.models.PlaylistsPager;
 import kaaes.spotify.webapi.android.models.Track;
-import retrofit.client.Response;
 
 public class APISpotify {
 
@@ -55,6 +54,7 @@ public class APISpotify {
         mtoken = token;
         api.setAccessToken(token);
         spotify = APISpotify.api.getService();
+        Log.d("", peepo.testUser(spotify.getMe().id));
     }
 
     /*
@@ -253,7 +253,4 @@ public class APISpotify {
         }
         return mergedList;
     }
-
-
-
 }
